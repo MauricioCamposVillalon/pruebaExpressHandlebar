@@ -1,0 +1,50 @@
+<div class="py-4">
+  <h2>Administración</h2>
+  {{#if session.email}}
+  <h3 class="mt-4">Bievenido {{session.nombre}}</h3>
+  {{/if}}
+
+  <hr class="w-50" />
+  <table class="table w-50 m-auto">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Foto</th>
+        <th scope="col">Nombre</th>
+        <th scope="col">Años de experiencia</th>
+        <th scope="col">Especialidad</th>
+        <th scope="col">Estado</th>
+      </tr>
+    </thead>
+    <tbody id='cuerpo'>
+      {{#each usuarios}}
+      <tr>
+        <td>{{this.id}}</td>
+        <td><img src='assets/img/{{this.foto}}.jpg' width="60" height="50"></td>
+        <td>{{this.nombre}}</td>
+        <td>{{this.anos_experiencia}}</td>
+        <td>{{this.especialidad}}</td>
+        <td><input type='checkbox' {{#if this.estado}} checked {{/if}} onclick='changeStatus({{this.id}}, this)' value= "1"></td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+
+<script>
+  const changeStatus = async (id, e) => {
+    const estado = e.checked
+    try {
+      await axios.put('http://localhost:3000/admin', {
+        id,
+        estado,
+      })
+      swal(estado ? 'Perfil de usuario aprobado' : 'Perfil de usuario en revisión')
+    } catch ({ response }) {
+      const { data } = response
+      const { error } = data
+      swal(error)
+    }
+  }
+</script>

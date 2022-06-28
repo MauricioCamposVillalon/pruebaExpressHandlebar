@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand">
+    <img class="navbar-brand" src="assets/img/icono.svg" alt="Logo" width="90" height="70"
+      class="d-inline-block align-top" alt="">
+    {{session.nombre}}
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link text-light" href="/"></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" href="/">Home</a>
+        </li>
+        {{#unless session.email}}
+        <li class="nav-item">
+          <a class="nav-link" href="/login">Iniciar Sesión</a>
+        </li>
+        {{/unless}}
+        <li class="nav-item">
+          <a class="nav-link" href="/registro">Registro</a>
+        </li>
+        {{#if session.email}}
+        <li class="nav-item">
+          {{#if session.estado}}
+          <a class="nav-link" href="/admin?token={{session.token}}">Administración</a>
+          {{/if}}
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/datos?token={{session.token}}">Datos</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-light" href="/logout">Salir</a>
+        </li>
+        {{/if}}
+      </ul>
+    </div>
+</nav>

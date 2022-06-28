@@ -1,0 +1,95 @@
+<div class="py-4">
+  <h2>Datos del perfil</h2>
+  <h2>{{skater.nombre}}</h2>
+  <hr class="w-50" />
+
+  <form id="formPerfil">
+    <div class="form-group row w-50 m-auto">
+      <div class="form-group col-12 col-sm-6">
+        <label>Email</label>
+        <input class="form-control m-auto minuscula" name="mail" disabled value="tonyhawk@skate.com" />
+      </div>
+      <div class="form-group col-12 col-sm-6">
+        <label>Nombre</label>
+        <input class="form-control m-auto" name="nombre" id="nombre" value="{{skater.nombre}}" />
+      </div>
+      <div class="form-group col-12 col-sm-6">
+        <label>Password</label>
+        <input type="password" name="password" id="password" class="form-control m-auto" value="{{skater.password}}" />
+      </div>
+      <div class="form-group col-12 col-sm-6">
+        <label>Repita la password</label>
+        <input type="password" name="password2" id="password2" class="form-control m-auto"
+          value="{{skater.password}}" />
+      </div>
+      <div class="form-group col-12 col-sm-6">
+        <label>Años de experiencia</label>
+        <input type="number" class="form-control m-auto" name="anosExperiencia" id="anosExperiencia"
+          value="{{skater.anos_experiencia}}" min="0" />
+      </div>
+      <div class="form-group col-12 col-sm-6">
+        <label>Especialidad</label>
+        <input class="form-control m-auto" name="especialidad" id="especialidad" value="{{skater.especialidad}}" />
+      </div>
+    </div>
+    <div class="mb-1">
+      <button class="btn btn-primary" id="btnactualizar">Actualizar</button>
+    </div>
+    <div>
+      <button class="btn btn-danger" id="btneliminar">Eliminar cuenta</button>
+    </div>
+  </form>
+</div>
+
+
+<script>
+  const formPerfil = document.getElementById("formPerfil");
+  let id = `{{skater.id}}`;
+  let img = `{{skater.foto}}`;
+  console.log(img);
+  let nombre = document.getElementById("nombre").value;
+
+  document.getElementById("btnactualizar").addEventListener("click", async (e) => { // traspaso de datos para Actualizar el usuario
+    e.preventDefault();
+    let password = document.getElementById("password").value;
+    let contrasena2 = document.getElementById("password2").value;
+    //console.log(password, " /", contrasena2)
+    if (password === contrasena2) {
+      let mail = `{{skater.email}}`;
+      // let nombre = document.getElementById("nombre").value;
+      let anoExperiencia = document.getElementById("anosExperiencia").value;
+      let especialidad = document.getElementById("especialidad").value;
+      //console.log(mail)
+      //  console.log(formActualiza)
+      axios.put("/datos", {
+        mail,
+        nombre,
+        password,
+        anoExperiencia,
+        especialidad,
+      })
+        .then(respuesta => {
+          swal("Se Actualizo usuario")
+        }).catch(error => {
+          swal("Algo ha salido mal, vuelva a intentar")
+        })
+    } else {
+      swal("Las contraseñas no coinciden, por favor vuelva a ingresar")
+    }
+
+  });
+  document.getElementById("btneliminar").addEventListener("click", async (e) => { // elimino el usuario y redirecciono al home 
+    e.preventDefault();
+    console.log("id desde datos: ", id )
+    axios.delete("/datos" + "/" + id + "/"+img).then(() => {
+      swal("Usuario" + nombre + " eliminado");
+      
+    });
+  window.location.replace("/logout");
+  });
+
+
+
+
+
+</script>
